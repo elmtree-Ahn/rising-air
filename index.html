@@ -700,7 +700,7 @@ const flameAt = (x, y, s, now, i = 0) => `<use href="#flame" transform="translat
       fd.forEach(d => {
         if (!d.out) {
           moveBox(d, .05, dt, 475, 195, 765, 765);
-          if (open && d.y > 460 && Math.random() < dt / 1500) { d.out = true; d.vx = rand(.08, .16); d.vy = 0; }
+          if (open && d.y > 460 && Math.random() < dt / 600) { d.out = true; d.vx = rand(.08, .16); d.vy = 0; }
         } else {
           d.vy = Math.min(.25, d.vy + .0005 * dt); d.x += d.vx * dt; d.y += d.vy * dt;
           if (d.y > 772) { d.y = 772; d.vy = 0; d.vx = Math.max(d.vx, .1); }
@@ -709,7 +709,7 @@ const flameAt = (x, y, s, now, i = 0) => `<use href="#flame" transform="translat
       });
       $('#fdot4').innerHTML = fd.map(d => `<g opacity="${clamp((1560 - d.x) / 300, 0, 1).toFixed(2)}">${dotSvg(d, 16, '#cfe9fa', '#3a9ae0')}</g>`).join('');
       $('#door4').innerHTML = open
-        ? `<path d="M810 150 L940 105 V850 L810 805Z" fill="#f5f8fb" stroke="#aab6c2" stroke-width="7" stroke-linejoin="round"/><rect x="900" y="400" width="14" height="120" rx="7" fill="#aab6c2"/>`
+        ? `<path d="M430 150 L300 105 V850 L430 805Z" fill="#f5f8fb" stroke="#aab6c2" stroke-width="7" stroke-linejoin="round"/><rect x="326" y="400" width="14" height="120" rx="7" fill="#aab6c2"/>`
         : `<rect x="430" y="150" width="380" height="655" rx="26" fill="#fff" stroke="#aab6c2" stroke-width="8"/><path d="M430 380 H810" stroke="#aab6c2" stroke-width="6"/><rect x="770" y="220" width="14" height="110" rx="7" fill="#aab6c2"/><rect x="770" y="430" width="14" height="140" rx="7" fill="#aab6c2"/>`;
       farA += ((open ? 1 : 0) - farA) * Math.min(1, dt / 500);
       $('#farr4').setAttribute('opacity', farA.toFixed(2));
