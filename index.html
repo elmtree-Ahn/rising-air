@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>위로 올라가는 공기 탐험 | 어게인 실험과학 수학학원</title>
+<meta name="description" content="손으로 만지며 알아보는 상승기류·하강기류·대류, 위로 올라가는 공기 탐험 놀이">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6fbff; --ice:#e3f3fd; --ice2:#bfe4fb; --blue:#3a9ae0; --blue-d:#2476b8; --cloud:#ffffff;
+  --org:#ff8a1f; --org-d:#c85f00; --org-s:#fff0dd;
+  --mint:#dcf5ea; --mint2:#8fdcb8; --mint-d:#2f9e6e;
+  --ink:#33414f; --sub:#6c7a8a; --line:#d3e7f5;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif;font-weight:500}
+body{min-height:100vh;display:flex;flex-direction:column;-webkit-user-select:none;user-select:none;overflow-x:hidden;
+  background:linear-gradient(90deg,rgba(58,154,224,.06) 1px,transparent 1px) 0 0/34px 34px,linear-gradient(rgba(58,154,224,.06) 1px,transparent 1px) 0 0/34px 34px,
+  radial-gradient(circle at 0% 0%,#fff1e0 0 240px,transparent 420px),radial-gradient(circle at 100% 30%,#dff1fd 0 220px,transparent 420px),var(--bg)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+
+.bbtn{font-family:"Jua",sans-serif;font-size:22px;min-height:62px;min-width:150px;padding:10px 28px;color:#fff;background:var(--blue);border-radius:999px;
+  box-shadow:inset 0 -6px 0 rgba(0,0,0,.12),0 5px 0 var(--blue-d);word-break:keep-all}
+.bbtn:active{transform:translateY(3px)}
+.bbtn:disabled{opacity:.35;cursor:default}
+.bbtn.org{background:var(--org);box-shadow:inset 0 -6px 0 rgba(0,0,0,.1),0 5px 0 var(--org-d)}
+.bbtn.white{background:#fff;color:var(--blue-d);box-shadow:inset 0 -6px 0 rgba(0,0,0,.05),0 5px 0 var(--line)}
+.bbtn.white.on{background:#fff3c4;color:#8a6400;box-shadow:inset 0 -6px 0 rgba(0,0,0,.06),0 5px 0 #e8c95a;opacity:1}
+.bbtn.pulse{animation:pulse 1.2s infinite}
+.bbtn[hidden]{display:none}
+
+header{position:sticky;top:0;z-index:30;background:var(--cloud);box-shadow:0 3px 0 var(--line);padding:10px 16px}
+.head-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:54px;flex:none}
+.titles{flex:1;min-width:0}
+.titles .brand{font-family:"Jua",sans-serif;font-size:16px;color:var(--sub)}
+.titles h1{margin:0;font-family:"Jua",sans-serif;font-weight:400;font-size:clamp(22px,4vw,34px);color:var(--org-d);line-height:1.15;word-break:keep-all}
+.share{min-width:0;font-size:18px;min-height:54px;padding:8px 22px;display:flex;align-items:center;gap:6px;flex:none}
+
+nav{max-width:1100px;width:100%;margin:14px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.tab{position:relative;min-height:64px;border-radius:20px;background:#fff;font-family:"Jua",sans-serif;font-size:clamp(15px,1.9vw,19px);line-height:1.2;padding:6px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:3px solid transparent;box-shadow:0 3px 0 var(--line);word-break:keep-all;text-align:center}
+.tab .n{width:24px;height:24px;border-radius:50%;background:var(--ice2);color:var(--blue-d);font-size:14px;display:grid;place-items:center}
+.tab.on{background:var(--org-s);border-color:var(--org)}
+.tab.on .n{background:var(--org);color:#fff}
+.tab .star{position:absolute;top:-10px;right:-4px;font-size:22px;display:none}
+.tab.done .star{display:block;animation:pop .5s}
+
+main{flex:1;max-width:1100px;width:100%;margin:0 auto;padding:16px}
+.panel{display:none;animation:fadein .3s}
+.panel.on{display:block}
+.coach{display:flex;align-items:flex-end;gap:10px;margin:4px 0 12px}
+.coach svg{width:70px;height:78px;flex:none;animation:float 2.4s ease-in-out infinite}
+.bubble{position:relative;flex:1;min-width:0;background:#fff;border:3px solid var(--ice2);border-radius:22px;padding:12px 18px;font-family:"Jua",sans-serif;
+  font-size:clamp(18px,2.4vw,24px);line-height:1.45;word-break:keep-all;min-height:58px}
+.bubble::before{content:"";position:absolute;left:-14px;bottom:16px;border:10px solid transparent;border-right:14px solid var(--ice2);border-left:0}
+.bubble b{font-weight:400;color:var(--org-d)}
+.bubble b.c{color:var(--blue-d)}
+.bubble.new{animation:pop .4s}
+.card{display:none;margin:16px auto 0;max-width:880px;border-radius:24px;background:var(--mint);border:4px solid var(--mint2);padding:16px 20px;
+  font-family:"Jua",sans-serif;font-size:clamp(19px,2.5vw,24px);text-align:center;line-height:1.5;color:#1f6b4b;word-break:keep-all}
+.card.on{display:block;animation:pop .5s}
+.card .big{display:block;font-size:1.3em;color:#17603f}
+/* 가로 화면에서도 장면이 한눈에 들어오도록 높이에 맞춰 너비를 줄임 */
+.stage{position:relative;width:100%;max-width:max(480px,calc((100vh - 310px)*1.7778));margin:0 auto;border-radius:28px;overflow:hidden;touch-action:none;box-shadow:0 6px 0 var(--line);background:#f4fbff}
+.stage>svg{display:block;width:100%;height:auto;touch-action:none}
+.stage.shake{animation:shake .35s}
+.row{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.hint{position:absolute;font-family:"Jua",sans-serif;font-size:clamp(14px,2.1vw,21px);color:#8a4200;background:#fff;border:3px solid var(--org);border-radius:999px;padding:4px 14px;
+  animation:bob 1s infinite;z-index:5;white-space:nowrap;pointer-events:none;transform:translateX(-50%)}
+.hint[hidden]{display:none}
+.cap{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);background:#fff3c4;border:3px solid #ffd666;border-radius:999px;padding:5px 16px;font-family:"Jua",sans-serif;
+  font-size:clamp(13px,2vw,21px);white-space:nowrap;z-index:5;max-width:96%;pointer-events:none}
+.cap.hot{background:var(--org-s);border-color:var(--org);color:#8a4200}
+.cap.cold{background:var(--ice);border-color:var(--blue);color:var(--blue-d)}
+.cap[hidden]{display:none}
+.steam{fill:none;stroke:#fff;stroke-width:12;stroke-linecap:round;opacity:.9;animation:steam 1.8s ease-in infinite}
+
+/* 밀어서 조절하는 손잡이 */
+.slide{display:flex;align-items:center;gap:12px;width:min(100%,640px);background:#fff;border-radius:999px;padding:6px 22px;box-shadow:0 4px 0 var(--line);
+  font-family:"Jua",sans-serif;font-size:clamp(17px,2.4vw,24px);white-space:nowrap}
+.slide .c{color:var(--blue-d)} .slide .w{color:var(--org-d)}
+.slide input{flex:1;min-width:0;height:60px;margin:0;-webkit-appearance:none;appearance:none;background:transparent;touch-action:none;cursor:pointer}
+.slide input::-webkit-slider-runnable-track{height:18px;border-radius:99px;background:linear-gradient(90deg,#7cc4ee,#ffd666,var(--org))}
+.slide input::-moz-range-track{height:18px;border-radius:99px;background:linear-gradient(90deg,#7cc4ee,#ffd666,var(--org))}
+.slide input::-webkit-slider-thumb{-webkit-appearance:none;width:56px;height:56px;margin-top:-19px;border-radius:50%;background:#fff;border:7px solid var(--org);box-shadow:0 4px 0 var(--org-d)}
+.slide input::-moz-range-thumb{width:44px;height:44px;border-radius:50%;background:#fff;border:7px solid var(--org);box-shadow:0 4px 0 var(--org-d)}
+
+/* O/X 퀴즈 */
+.dots{display:flex;gap:10px;justify-content:center;margin:6px 0 12px}
+.dots i{width:34px;height:34px;border-radius:50%;background:#fff;border:3px solid var(--ice2);font-style:normal;font-family:"Jua",sans-serif;font-size:17px;color:var(--blue-d);display:grid;place-items:center}
+.dots i.now{border-color:var(--org);background:var(--org-s);color:var(--org-d)}
+.dots i.ok{background:var(--mint2);border-color:var(--mint-d);color:#fff}
+.qbox{max-width:880px;margin:0 auto;background:#fff;border:4px solid var(--ice2);border-radius:26px;padding:20px;text-align:center;font-family:"Jua",sans-serif;
+  font-size:clamp(22px,3.4vw,34px);line-height:1.4;word-break:keep-all;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.qbox small{font-size:.55em;color:var(--sub)}
+.ox{display:flex;gap:24px;justify-content:center;margin-top:18px}
+.oxb{width:clamp(120px,24vw,180px);height:clamp(120px,24vw,180px);border-radius:32px;background:#fff;font-family:"Jua",sans-serif;font-size:clamp(70px,14vw,110px);line-height:1;
+  display:grid;place-items:center;box-shadow:inset 0 -8px 0 rgba(0,0,0,.06),0 6px 0 var(--line)}
+.oxb.o{color:var(--blue);border:5px solid var(--blue)}
+.oxb.x{color:var(--org);border:5px solid var(--org)}
+.oxb:active{transform:translateY(4px)}
+.oxb:disabled{opacity:.4}
+.oxb.pick{background:var(--mint)}
+.qfb{min-height:64px;margin:16px auto 0;max-width:880px;border-radius:20px;padding:10px 16px;font-family:"Jua",sans-serif;font-size:clamp(18px,2.4vw,23px);
+  text-align:center;line-height:1.4;word-break:keep-all;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--sub)}
+.qfb.good{background:var(--mint);color:#1f6b4b;animation:pop .4s}
+.qfb.bad{background:#fff3c4;color:#8a6400;animation:shake .4s}
+
+footer{margin-top:28px;background:var(--blue-d);color:#fff;text-align:center;padding:20px 16px 26px}
+footer .brand{font-family:"Jua",sans-serif;font-size:22px}
+footer .tel{margin-top:4px;font-size:18px}
+.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,40px);opacity:0;background:var(--ink);color:#fff;font-family:"Jua",sans-serif;font-size:20px;padding:14px 26px;border-radius:999px;z-index:70;transition:.25s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+.fly{position:fixed;bottom:-160px;width:70px;z-index:58;pointer-events:none;animation:upup linear forwards}
+.fly svg{display:block;width:100%;height:auto;animation:sway 1.1s ease-in-out infinite alternate}
+
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{margin-left:0}25%{margin-left:-7px}75%{margin-left:7px}}
+@keyframes bob{50%{margin-top:-6px}}
+@keyframes float{50%{transform:translateY(-6px) rotate(2deg)}}
+@keyframes pulse{50%{transform:scale(1.06)}}
+@keyframes steam{0%{transform:translateY(0);opacity:0}30%{opacity:.9}100%{transform:translateY(-70px);opacity:0}}
+@keyframes upup{to{transform:translateY(calc(-100vh - 320px))}}
+@keyframes sway{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+@media (max-width:760px){
+  nav{grid-template-columns:repeat(3,1fr);gap:6px}
+  .tab{font-size:14px;min-height:58px;border-radius:14px}
+  .share span{display:none}
+  .share{padding:8px 16px}
+  .titles .brand{font-size:13px}
+  .coach svg{width:54px;height:60px}
+  .bbtn{font-size:19px;padding:10px 20px}
+  .slide{padding:6px 14px;gap:8px}
+  .cap{position:static;transform:none;display:block;width:fit-content;margin:8px auto;white-space:normal;text-align:center;font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+.words{max-width:880px;margin:16px auto 0;display:grid;gap:10px}
+.words div{display:flex;align-items:center;gap:14px;background:#fff;border-radius:20px;padding:10px 18px;box-shadow:0 3px 0 var(--line);font-size:clamp(16px,2.2vw,21px);word-break:keep-all;line-height:1.4}
+.words b{font-family:"Jua",sans-serif;font-weight:400;font-size:1.25em;min-width:5.2em;text-align:center;border-radius:999px;padding:4px 12px;flex:none}
+.words .u b{background:var(--org-s);color:var(--org-d)}
+.words .d b{background:var(--ice);color:var(--blue-d)}
+.words .r b{background:var(--mint);color:var(--mint-d)}
+</style>
+</head>
+<body>
+<header>
+  <div class="head-in">
+    <svg class="logo" viewBox="0 0 120 130" aria-hidden="true"><use href="#char"/></svg>
+    <div class="titles">
+      <div class="brand">어게인 실험과학 수학학원</div>
+      <h1>🔥 위로 올라가는 공기 탐험!</h1>
+    </div>
+    <button class="bbtn white share" id="share" aria-label="공유하기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2476b8" stroke-width="2.6" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+      <span>공유하기</span>
+    </button>
+  </div>
+</header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="char">
+      <ellipse cx="60" cy="122" rx="30" ry="6" fill="#33414f" opacity=".12"/>
+      <circle cx="60" cy="62" r="50" fill="#ffc890" stroke="#ff8a1f" stroke-width="4"/>
+      <ellipse cx="40" cy="36" rx="9" ry="15" fill="#fff" opacity=".6" transform="rotate(-32 40 36)"/>
+      <circle cx="46" cy="60" r="5.5" fill="#33414f"/><circle cx="74" cy="60" r="5.5" fill="#33414f"/>
+      <circle cx="47.6" cy="58.4" r="1.8" fill="#fff"/><circle cx="75.6" cy="58.4" r="1.8" fill="#fff"/>
+      <path d="M50 74 Q60 83 70 74" stroke="#33414f" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <circle cx="35" cy="72" r="6" fill="#ff9a6a" opacity=".85"/><circle cx="85" cy="72" r="6" fill="#ff9a6a" opacity=".85"/>
+    </g>
+    <!-- 귀여운 불꽃 (밑동이 0,0) -->
+    <g id="flame">
+      <path d="M0 -120 C30 -80 55 -55 52 -28 C50 0 30 8 0 8 C-30 8 -50 0 -52 -28 C-55 -55 -30 -80 0 -120Z" fill="#ff8a1f"/>
+      <path d="M0 -72 C18 -50 30 -34 28 -16 C26 0 14 4 0 4 C-14 4 -26 0 -28 -16 C-30 -34 -18 -50 0 -72Z" fill="#ffd666"/>
+      <circle cx="-11" cy="-22" r="4" fill="#8a4200"/><circle cx="11" cy="-22" r="4" fill="#8a4200"/>
+      <path d="M-7 -11 Q0 -4 7 -11" stroke="#8a4200" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- 티라이트 초 (윗면 가운데가 0,0) -->
+    <g id="tea">
+      <rect x="-48" y="0" width="96" height="34" rx="9" fill="#cfd6dd" stroke="#9aa5b1" stroke-width="5"/>
+      <ellipse cy="2" rx="48" ry="11" fill="#fffdf6" stroke="#d3dbe3" stroke-width="4"/>
+      <path d="M0 2 V-14" stroke="#555" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <marker id="aho" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#ff8a1f"/></marker>
+    <marker id="ahb" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#3a9ae0"/></marker>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7fbff"/><stop offset="1" stop-color="#e6f3fc"/></linearGradient>
+  </defs>
+</svg>
+
+<nav id="tabs">
+  <button class="tab on"><span class="n">1</span>🍵 날아오르는 티백<span class="star">⭐</span></button>
+  <button class="tab"><span class="n">2</span>🏭 페트병 연기 굴뚝<span class="star">⭐</span></button>
+  <button class="tab"><span class="n">3</span>🐍 돌아가는 종이뱀<span class="star">⭐</span></button>
+  <button class="tab"><span class="n">4</span>🏠 빙글빙글 대류<span class="star">⭐</span></button>
+  <button class="tab"><span class="n">5</span>🧩 O/X 퀴즈<span class="star">⭐</span></button>
+</nav>
+
+<main>
+<!-- 1. 날아오르는 티백 -->
+<section class="panel on" id="p1">
+  <div class="coach"><svg viewBox="0 0 120 130"><use href="#char"/></svg><div class="bubble" id="b1">접시 위에 동그랗게 편 <b>티백 통</b>을 세웠어요.<br>아래 <b>점화기</b> 단추를 눌러 볼까요?</div></div>
+  <div class="stage">
+    <svg id="s1" viewBox="0 0 1600 900" role="img" aria-label="접시 위에 세운 티백 통">
+      <rect width="1600" height="900" fill="url(#wall)"/>
+      <rect y="790" width="1600" height="110" fill="#f3dcb4"/>
+      <ellipse cx="800" cy="790" rx="280" ry="44" fill="#fff" stroke="#c9d3dd" stroke-width="7"/>
+      <ellipse cx="800" cy="784" rx="200" ry="26" fill="#f1f5f9"/>
+      <g id="arr1"></g>
+      <g id="dot1"></g>
+      <g id="tube1"></g>
+      <g id="fl1"></g>
+      <g id="ash1"></g>
+      <text id="whoo1" x="1000" y="260" font-family="Jua" font-size="90" fill="#c85f00" opacity="0">휙!</text>
+    </svg>
+    <div class="cap" id="cap1">티백 통을 접시에 세웠어요</div>
+  </div>
+  <div class="row"><button class="bbtn org pulse" id="go1">🔥 점화기로 불 붙이기</button><button class="bbtn white" id="re1" hidden>🔁 새 티백으로 다시</button></div>
+  <div class="card" id="c1"><span class="big">올라가는 공기가 가벼운 재를 실어 올렸어요!</span>불이 통 속 공기를 데우면, 데워진 공기가 위로 올라가요. 다 타고 남은 재는 아주 가벼워서 올라가는 공기를 타고 함께 날아올라요.</div>
+</section>
+
+<!-- 2. 페트병 연기 굴뚝 -->
+<section class="panel" id="p2">
+  <div class="coach"><svg viewBox="0 0 120 130"><use href="#char"/></svg><div class="bubble" id="b2">아래에 <b>홈</b>을 낸 페트병이 두 개 있어요.<br><b>향</b>을 끌어서 병의 홈 가까이에 대 보세요!</div></div>
+  <div class="stage">
+    <svg id="s2" viewBox="0 0 1600 900" role="img" aria-label="촛불이 없는 페트병과 촛불을 켠 페트병, 그리고 향">
+      <rect width="1600" height="900" fill="url(#wall)"/>
+      <rect y="800" width="1600" height="100" fill="#f3dcb4"/>
+      <text x="470" y="100" text-anchor="middle" font-family="Jua" font-size="50" fill="#6c7a8a">촛불 없음</text>
+      <text x="1170" y="100" text-anchor="middle" font-family="Jua" font-size="50" fill="#c85f00">촛불 켬</text>
+      <g id="in2"></g>
+      <g id="bot2"></g>
+      <g id="air2" opacity="0">
+        <path d="M760 680 Q900 690 1015 748" stroke="#3a9ae0" stroke-width="16" fill="none" stroke-linecap="round" marker-end="url(#ahb)"/>
+        <path d="M760 860 Q900 830 1015 785" stroke="#3a9ae0" stroke-width="16" fill="none" stroke-linecap="round" marker-end="url(#ahb)"/>
+        <rect x="560" y="560" width="480" height="70" rx="35" fill="#fff" stroke="#3a9ae0" stroke-width="5"/>
+        <text x="800" y="608" text-anchor="middle" font-family="Jua" font-size="40" fill="#2476b8">바깥 공기가 밀려 들어와요</text>
+      </g>
+      <g id="smk2"></g>
+      <g id="inc2" style="cursor:grab"></g>
+    </svg>
+    <div class="hint" id="h2" style="left:50%;top:50%">향을 끌어 홈에 대요 ➡</div>
+    <div class="cap" id="cap2">향을 끌어 홈 가까이에 대 보세요</div>
+  </div>
+  <div class="card" id="c2"><span class="big">바깥 공기가 밀려 들어오며 연기를 실어 올렸어요!</span>촛불이 병 속 공기를 데우면, 데워진 공기가 위쪽 입구로 올라가 빠져나가요. 그러면 바깥 공기가 홈으로 밀려 들어오며 연기를 싣고 가요. 촛불이 없는 병은 공기가 데워지지 않아 연기가 그냥 흩어져요.</div>
+</section>
+
+<!-- 3. 돌아가는 종이뱀 -->
+<section class="panel" id="p3">
+  <div class="coach"><svg viewBox="0 0 120 130"><use href="#char"/></svg><div class="bubble" id="b3">막대 끝에 <b>종이뱀</b>을 올렸어요. 아래에 초가 4개 있어요.<br>초를 <b>톡</b> 눌러 켜고 꺼 보세요!</div></div>
+  <div class="stage">
+    <svg id="s3" viewBox="0 0 1600 900" role="img" aria-label="막대 위 종이뱀과 그 아래 티라이트 초 4개">
+      <rect width="1600" height="900" fill="url(#wall)"/>
+      <rect y="820" width="1600" height="80" fill="#f3dcb4"/>
+      <rect x="440" y="790" width="720" height="34" rx="12" fill="#b9c3cd" stroke="#8a96a3" stroke-width="5"/>
+      <path d="M800 742 V246" stroke="#8a5d2a" stroke-width="14" stroke-linecap="round"/>
+      <path d="M800 248 V226" stroke="#6c7a8a" stroke-width="5" stroke-linecap="round"/>
+      <path d="M735 794 Q738 738 800 736 Q862 738 865 794Z" fill="#c9a777" stroke="#8a5d2a" stroke-width="5"/>
+      <g id="arr3"></g>
+      <g id="snk3"></g>
+      <g id="cdl3"></g>
+      <text x="800" y="880" text-anchor="middle" font-family="Jua" font-size="40" fill="#8a5d2a" id="cnt3">켠 촛불 0개</text>
+    </svg>
+    <div class="hint" id="h3" style="left:50%;top:70%">초를 톡 눌러요!</div>
+    <div class="cap" id="cap3" style="bottom:auto;top:3%">촛불이 꺼져 있어요. 뱀이 가만히 있어요</div>
+  </div>
+  <div class="card" id="c3"><span class="big">올라가는 공기가 뱀을 밀어서 돌아요!</span>촛불에 데워진 공기가 위로 올라가며 비스듬한 뱀의 몸을 아래에서 밀어요. 촛불이 많을수록 공기가 더 세게 올라가 뱀이 더 빨리 돌아요. 뱀이 스스로 도는 것이 아니에요.</div>
+</section>
+
+<!-- 4. 빙글빙글 대류 -->
+<section class="panel" id="p4">
+  <div class="coach"><svg viewBox="0 0 120 130"><use href="#char"/></svg><div class="bubble" id="b4">추운 겨울 방이에요. <b>난로</b>를 켜 볼까요?<br><b class="c">냉장고 문</b>도 열어 보세요!</div></div>
+  <div class="stage">
+    <svg id="s4" viewBox="0 0 1600 900" role="img" aria-label="난로가 있는 방 안의 공기 흐름">
+      <rect width="1600" height="900" fill="url(#wall)"/>
+      <g id="room4">
+        <rect x="100" y="120" width="1400" height="690" fill="#fffaf2" stroke="#d3c2a8" stroke-width="10"/>
+        <rect x="100" y="800" width="1400" height="100" fill="#e8cfa4"/>
+        <!-- 창문 -->
+        <rect x="1405" y="250" width="90" height="320" fill="#d7eefc" stroke="#7cc4ee" stroke-width="8"/>
+        <path d="M1450 250 V570 M1405 410 H1495" stroke="#7cc4ee" stroke-width="6"/>
+        <text x="1450" y="225" text-anchor="middle" font-family="Jua" font-size="36" fill="#2476b8">❄️ 창문</text>
+        <!-- 난로 -->
+        <rect x="170" y="640" width="190" height="165" rx="20" fill="#8a96a3" stroke="#5f6b78" stroke-width="6"/>
+        <rect x="200" y="670" width="130" height="90" rx="14" fill="#3b4652"/>
+        <g id="stv4"><use href="#flame" transform="translate(265 752) scale(.6)"/></g>
+        <text x="265" y="850" text-anchor="middle" font-family="Jua" font-size="38" fill="#5f4a2a">난로</text>
+        <g id="rarr4" opacity="0">
+          <path d="M440 640 V300" stroke="#ff8a1f" stroke-width="20" stroke-linecap="round" marker-end="url(#aho)"/>
+          <text x="470" y="470" font-family="Jua" font-size="44" fill="#c85f00">상승기류</text>
+          <path d="M1240 300 V640" stroke="#3a9ae0" stroke-width="20" stroke-linecap="round" marker-end="url(#ahb)"/>
+          <text x="1210" y="470" text-anchor="end" font-family="Jua" font-size="44" fill="#2476b8">하강기류</text>
+          <text x="800" y="490" text-anchor="middle" font-family="Jua" font-size="64" fill="#2f9e6e">빙글빙글 대류</text>
+        </g>
+        <g id="rdot4"></g>
+      </g>
+      <g id="frg4" style="display:none">
+        <rect y="800" width="1600" height="100" fill="#e8cfa4"/>
+        <rect x="430" y="150" width="380" height="655" rx="26" fill="#fff" stroke="#aab6c2" stroke-width="8"/>
+        <rect id="fin4" x="455" y="175" width="330" height="605" rx="14" fill="#e3f3fd"/>
+        <path d="M455 360 H785 M455 540 H785" stroke="#bfe4fb" stroke-width="10"/>
+        <g id="fdot4"></g>
+        <g id="door4"></g>
+        <g id="farr4" opacity="0">
+          <path d="M1020 330 V640" stroke="#3a9ae0" stroke-width="20" stroke-linecap="round" marker-end="url(#ahb)"/>
+          <text x="1060" y="470" font-family="Jua" font-size="56" fill="#2476b8">하강기류</text>
+          <text x="1060" y="530" font-family="Jua" font-size="36" fill="#2476b8">식은 공기가 흘러내려요</text>
+        </g>
+      </g>
+    </svg>
+    <div class="cap" id="cap4" style="bottom:auto;top:3%">난로가 꺼져 있어요. 방이 추워요</div>
+  </div>
+  <div class="row"><button class="bbtn org pulse" id="stove4">🔥 난로 켜기</button><button class="bbtn" id="fridge4">🧊 냉장고 문 열기</button></div>
+  <div class="words">
+    <div class="u"><b>상승기류</b>데워진 공기가 위로 올라가는 흐름</div>
+    <div class="d"><b>하강기류</b>식은 공기가 아래로 내려오는 흐름</div>
+    <div class="r"><b>대류</b>데워진 공기는 올라가고 식은 공기는 내려오며 빙글빙글 도는 것</div>
+  </div>
+  <div class="card" id="c4"><span class="big">데워진 공기는 위로, 식은 공기는 아래로!</span>난로에 데워진 공기는 올라가 천장을 따라 퍼지고, 창문 쪽에서 식어 내려와 바닥을 따라 난로로 돌아가요. 이렇게 빙글빙글 돌면서 방 전체를 데워요.</div>
+</section>
+
+<!-- 5. O/X 퀴즈 -->
+<section class="panel" id="p5">
+  <div class="coach"><svg viewBox="0 0 120 130"><use href="#char"/></svg><div class="bubble" id="b5">오늘 알아본 것을 떠올려 봐요.<br>맞으면 <b>O</b>, 틀리면 <b>X</b>를 꾹 눌러요!</div></div>
+  <div class="dots" id="dots5"></div>
+  <div class="qbox" id="q5"></div>
+  <div class="ox"><button class="oxb o" id="o5" aria-label="맞아요">O</button><button class="oxb x" id="x5" aria-label="틀려요">X</button></div>
+  <div class="qfb" id="fb5"></div>
+  <div class="row"><button class="bbtn org pulse" id="nx5" hidden>다음 문제 ▶</button><button class="bbtn white" id="re5" hidden>🔁 다시 하기</button></div>
+  <div class="card" id="c5"><span class="big">와, 상승기류 박사가 되었어요!</span>데워진 공기가 위로 올라가는 흐름을 상승기류라고 해요. 식은 공기가 아래로 내려오는 흐름은 하강기류예요.</div>
+</section>
+</main>
+
+<footer>
+  <div class="brand">어게인 실험과학 수학학원</div>
+  <div class="tel">교육문의 010.2976.5774</div>
+</footer>
+<div class="toast" id="toast"></div>
+<canvas id="fx"></canvas>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const rand = (a, b) => a + Math.random() * (b - a);
+const lerp = (a, b, t) => a + (b - a) * t;
+const show = (el, on) => el.style.display = on ? '' : 'none';
+// 차가운 파랑 → 따뜻한 주황 (t: 0~1)
+const tcol = t => { const a = [58, 154, 224], b = [255, 138, 31]; return `rgb(${a.map((v, i) => Math.round(lerp(v, b[i], clamp(t, 0, 1)))).join(',')})`; };
+
+/* ---------- 소리 ---------- */
+let ac;
+const audio = () => ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+function tone(f, d = .15, type = 'sine', at = 0, v = .18, f2) {
+  try {
+    const a = audio(), t = a.currentTime + at, o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + d);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t + d);
+  } catch (e) {}
+}
+function noise(d, freq, v, type = 'lowpass', at = 0) {
+  try {
+    const a = audio(), n = a.sampleRate * d, b = a.createBuffer(1, n, a.sampleRate), ch = b.getChannelData(0);
+    for (let i = 0; i < n; i++) ch[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * i / n);
+    const s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+    f.type = type; f.frequency.value = freq; g.gain.value = v;
+    s.buffer = b; s.connect(f).connect(g).connect(a.destination); s.start(a.currentTime + at);
+  } catch (e) {}
+}
+const sfx = {
+  pop: () => { tone(520, .09, 'triangle'); tone(780, .1, 'triangle', .06); },
+  good: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, .25, 'triangle', i * .09)),
+  win: () => [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, .3, 'triangle', i * .1)),
+  bad: () => { tone(300, .18, 'triangle', 0, .12); tone(220, .28, 'triangle', .15, .12); },
+  click: () => { tone(2200, .035, 'square', 0, .07); tone(1700, .04, 'square', .08, .07); },
+  puff: () => tone(300, .5, 'sine', 0, .2, 900),
+  shrink: () => tone(800, .45, 'sine', 0, .18, 260),
+  bang: () => { noise(.3, 2500, .9, 'lowpass'); tone(120, .3, 'square', 0, .2, 60); },
+  splash: () => noise(.4, 1600, .35, 'bandpass'),
+  sizzle: () => noise(.7, 4000, .12, 'highpass')
+};
+
+/* ---------- 반짝이 · 꽃가루 ---------- */
+const cv = $('#fx'), cx = cv.getContext('2d');
+let parts = [], running = false;
+const COLORS = ['#ff8a1f', '#3a9ae0', '#ffd666', '#7fd6b0', '#ffffff', '#ffb866'];
+function resizeFx() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; }
+addEventListener('resize', resizeFx); resizeFx();
+function sparkle(x, y, n = 22) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * 6.28, sp = rand(3, 8);
+    parts.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 2, r: 0, vr: .2, s: rand(7, 12), c: COLORS[i % 4], life: 50, star: true });
+  }
+  kick();
+}
+function confetti() {
+  for (let i = 0; i < 140; i++) parts.push({ x: rand(0, innerWidth), y: rand(-200, -10), vx: rand(-1.5, 1.5), vy: rand(1, 4), r: rand(0, 6), vr: rand(-.2, .2), s: rand(6, 11), c: COLORS[i % 6], life: 200, star: false });
+  kick();
+}
+function kick() { if (!running) { running = true; requestAnimationFrame(fxLoop); } }
+function fxLoop() {
+  const k = devicePixelRatio; cx.clearRect(0, 0, cv.width, cv.height);
+  parts = parts.filter(p => p.life-- > 0 && p.y < innerHeight + 40);
+  for (const p of parts) {
+    p.vy += p.star ? .14 : .03; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+    cx.save(); cx.translate(p.x * k, p.y * k); cx.rotate(p.r); cx.globalAlpha = Math.min(1, p.life / 20); cx.fillStyle = p.c;
+    if (p.star) { cx.beginPath(); for (let i = 0; i < 10; i++) { const rr = (i % 2 ? p.s / 2.4 : p.s) * k, a = i * Math.PI / 5; cx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } cx.fill(); }
+    else { cx.strokeStyle = '#d3e7f5'; cx.lineWidth = k; cx.fillRect(-p.s * k / 2, -p.s * k / 4, p.s * k, p.s * k / 2); cx.strokeRect(-p.s * k / 2, -p.s * k / 4, p.s * k, p.s * k / 2); }
+    cx.restore();
+  }
+  if (parts.length) requestAnimationFrame(fxLoop); else { running = false; cx.clearRect(0, 0, cv.width, cv.height); }
+}
+// 보상: 풍선들이 둥실둥실 날아오름
+const BAL = c => `<svg viewBox="0 0 100 150"><path d="M50 112 Q42 130 54 148" stroke="#6c7a8a" stroke-width="3" fill="none"/><ellipse cx="50" cy="56" rx="40" ry="50" fill="${c}"/><path d="M44 104 L56 104 L50 114Z" fill="${c}"/><ellipse cx="36" cy="36" rx="8" ry="14" fill="#fff" opacity=".5" transform="rotate(-25 36 36)"/></svg>`;
+function celebrate() {
+  sfx.win(); confetti();
+  for (let i = 0; i < 7; i++) {
+    const b = document.createElement('div'); b.className = 'fly';
+    b.style.left = rand(4, 88) + 'vw';
+    b.style.animationDuration = rand(3.2, 5) + 's'; b.style.animationDelay = rand(0, 1.2) + 's';
+    b.innerHTML = BAL(['#ff6b8a', '#ff8a1f', '#3a9ae0', '#ffd666', '#7fd6b0'][i % 5]);
+    b.addEventListener('animationend', e => e.target === b && b.remove()); document.body.appendChild(b);
+  }
+}
+
+/* ---------- 공통 ---------- */
+function coach(id, html) { const el = $(id); el.classList.remove('new'); void el.offsetWidth; el.classList.add('new'); el.innerHTML = html; }
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2000); }
+function showCard(id) { const c = $(id); c.classList.remove('on'); void c.offsetWidth; c.classList.add('on'); setTimeout(() => c.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300); }
+function setCap(el, t, cls) { if (el.textContent !== t) { el.textContent = t; el.className = 'cap' + (cls ? ' ' + cls : ''); } }
+const tabs = $$('.tab'), panels = $$('.panel');
+function finish(i, card) { showCard(card); if (!tabs[i].classList.contains('done')) { tabs[i].classList.add('done'); celebrate(); } else sfx.good(); }
+function openTab(i) {
+  tabs.forEach((x, j) => x.classList.toggle('on', j === i));
+  panels.forEach((p, j) => p.classList.toggle('on', j === i));
+}
+tabs.forEach((t, i) => t.onclick = () => { openTab(i); sfx.pop(); });
+// 주소 끝에 #1~#5 를 붙이면 그 탭이 바로 열림
+{ const h = +location.hash.slice(1); if (h >= 1 && h <= 5) openTab(h - 1); }
+$('#share').onclick = async () => {
+  const url = location.href;
+  if (navigator.share) { try { await navigator.share({ title: '위로 올라가는 공기 탐험!', text: '어게인 실험과학 수학학원 · 위로 올라가는 공기 탐험 놀이', url }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(url); }
+  catch (e) { const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  toast('주소가 복사됐어요');
+};
+function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
+function client(svg, x, y) { const p = svg.createSVGPoint(); p.x = x; p.y = y; const q = p.matrixTransform(svg.getScreenCTM()); return [q.x, q.y]; }
+// 공기 알갱이: 크기는 늘 같고, 빠르기와 움직일 수 있는 공간만 달라짐
+function makeDots(n, x0, y0, x1, y1) { return Array.from({ length: n }, () => ({ x: rand(x0, x1), y: rand(y0, y1), a: rand(0, 6.28) })); }
+function moveBox(d, sp, dt, x0, y0, x1, y1) {
+  let vx = Math.cos(d.a) * sp, vy = Math.sin(d.a) * sp;
+  d.x += vx * dt; d.y += vy * dt;
+  if (d.x < x0) { d.x = x0; vx = Math.abs(vx); } if (d.x > x1) { d.x = x1; vx = -Math.abs(vx); }
+  if (d.y < y0) { d.y = y0; vy = Math.abs(vy); } if (d.y > y1) { d.y = y1; vy = -Math.abs(vy); }
+  d.a = Math.atan2(vy, vx) + rand(-.05, .05);
+}
+const dotSvg = (d, r, fill = '#9fd6f6', st = '#3a9ae0') => `<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${r}" fill="${fill}" stroke="${st}" stroke-width="${(r / 5).toFixed(1)}"/>`;
+// 보이는 탭의 장면만 움직임
+const loops = [];
+const loop = (i, fn) => loops.push([i, fn]);
+let lastT = performance.now();
+requestAnimationFrame(function frame(now) {
+  const dt = Math.min(40, now - lastT); lastT = now;
+  for (const [i, fn] of loops) if (panels[i].classList.contains('on')) fn(dt, now);
+  requestAnimationFrame(frame);
+});
+
+// 위로 움직이는 화살표 한 묶음 (x 목록, 아래 y0에서 위로 len 만큼 오르며 반복)
+function risers(xs, y0, len, now, sp, col, op, dir = -1) {
+  const m = col === 'b' ? 'ahb' : 'aho', c = col === 'b' ? '#3a9ae0' : '#ff8a1f';
+  return xs.map((x, i) => {
+    const k = ((now * sp + i * 97) % len) / len, y = y0 + dir * k * len, a = op * Math.sin(k * Math.PI);
+    return `<path d="M${x} ${y.toFixed(1)} V${(y + dir * 80).toFixed(1)}" stroke="${c}" stroke-width="14" stroke-linecap="round" marker-end="url(#${m})" opacity="${a.toFixed(2)}"/>`;
+  }).join('');
+}
+const flameAt = (x, y, s, now, i = 0) => `<use href="#flame" transform="translate(${x} ${y}) scale(${(s * (1 + .05 * Math.sin(now / 70 + i))).toFixed(3)} ${(s * (1 + .1 * Math.sin(now / 90 + i * 2))).toFixed(3)})"/>`;
+
+/* =========== 1. 날아오르는 티백 =========== */
+(() => {
+  const go = $('#go1'), re = $('#re1'), cap = $('#cap1'), svg = $('#s1');
+  const TOP = 430, BOT = 776, XL = 720, XR = 880;
+  let b, lit, ash, done, heat, dots;
+  const reset = () => {
+    b = 0; lit = false; ash = null; done = false; heat = 0;
+    dots = Array.from({ length: 12 }, () => ({ x: rand(XL + 20, XR - 20), y: rand(TOP + 20, BOT - 20), a: rand(0, 6.28), h: 0 }));
+    go.hidden = false; re.hidden = true; $('#ash1').innerHTML = '';
+  };
+  reset();
+  go.onclick = () => {
+    audio(); if (lit) return; lit = true; go.hidden = true; sfx.click(); noise(.5, 3000, .15, 'highpass');
+    coach('#b1', '불이 붙었어요! <b>위에서부터</b> 천천히 타 내려가요.<br>통 속 <b>공기 알갱이</b>를 잘 보세요.');
+  };
+  re.onclick = () => { reset(); sfx.pop(); coach('#b1', '새 <b>티백 통</b>이에요.<br>다시 <b>점화기</b> 단추를 눌러 볼까요?'); };
+  loop(0, (dt, now) => {
+    if (lit && b < 1) {
+      b = Math.min(1, b + dt / 6500);
+      if (b >= 1) { ash = { t: 0 }; sfx.puff(); coach('#b1', '불이 다 타 내려가자 <b>가벼운 재</b>가 <b>휙</b> 떠올랐어요!'); }
+    }
+    heat += ((lit && (b < 1 || ash.t < 2600) ? 1 : 0) - heat) * Math.min(1, dt / 900);
+    const L = TOP + (BOT - TOP - 10) * b;
+    // 티백 통 (불이 타 내려간 만큼 짧아짐)
+    $('#tube1').innerHTML = b >= 1 ? '' :
+      `<rect x="${XL}" y="${L.toFixed(1)}" width="${XR - XL}" height="${(BOT - L).toFixed(1)}" fill="#f3e6c9" stroke="#c9b48a" stroke-width="6"/>`
+      + `<path d="M${XL + 30} ${(L + 20).toFixed(0)} V${BOT - 16}" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity=".55"/>`
+      + (lit ? `<rect x="${XL - 3}" y="${(L - 5).toFixed(1)}" width="${XR - XL + 6}" height="14" rx="6" fill="#5a4a3a"/><rect x="${XL}" y="${(L + 7).toFixed(1)}" width="${XR - XL}" height="8" fill="#ff9a4a" opacity=".7"/>`
+        : `<ellipse cx="800" cy="${TOP}" rx="80" ry="14" fill="#fbf3e2" stroke="#c9b48a" stroke-width="6"/>`);
+    // 귀여운 불꽃
+    $('#fl1').innerHTML = lit && b < 1 ? flameAt(752, L, .5, now, 1) + flameAt(848, L, .5, now, 2) + flameAt(800, L, .78, now) : '';
+    // 공기 알갱이: 불이 데우면 주황으로 바뀌며 위로 올라감
+    dots.forEach(d => {
+      const inside = d.y > L;
+      if (inside) d.h += ((lit && b < 1 ? 1 : heat) - d.h) * Math.min(1, dt / 700);
+      if (heat > .05) {
+        d.y -= (.03 + .22 * heat * Math.max(.3, d.h)) * dt; d.x += Math.sin(now / 300 + d.a) * .4;
+        if (d.y < 100) { d.y = BOT - 14; d.x = rand(XL + 20, XR - 20); d.h = 0; }
+      } else if (b < 1) moveBox(d, .04, dt, XL + 18, Math.max(TOP, L) + 18, XR - 18, BOT - 18);
+      else { d.y = Math.min(BOT - 14, d.y + .05 * dt); d.h *= .99; }
+    });
+    $('#dot1').innerHTML = dots.map(d => `<g opacity="${clamp((d.y - 100) / 220, 0, 1).toFixed(2)}">${dotSvg(d, 14, d.h > .4 ? '#ffc890' : '#cfe9fa', tcol(d.h))}</g>`).join('');
+    $('#arr1').innerHTML = heat > .05 ? risers([740, 800, 860], Math.min(L, BOT) - 30, 300, now, .14, 'o', heat) : '';
+    // 재가 휙 떠오름
+    if (ash) {
+      ash.t += dt;
+      const k = Math.min(1, ash.t / 2800), e = 1 - Math.pow(1 - k, 2), y = 760 - e * 640, x = 800 + Math.sin(ash.t / 280) * 55 * k, r = Math.sin(ash.t / 380) * 22;
+      $('#ash1').innerHTML = `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${r.toFixed(1)})" opacity="${(1 - Math.max(0, k - .85) * 4).toFixed(2)}">`
+        + `<ellipse rx="78" ry="15" fill="none" stroke="#7d838b" stroke-width="9" stroke-dasharray="30 10"/><ellipse rx="78" ry="15" fill="none" stroke="#b7bcc2" stroke-width="3" stroke-dasharray="12 26"/>`
+        + `<circle cx="-40" cy="-30" r="5" fill="#9aa0a7"/><circle cx="30" cy="-44" r="4" fill="#9aa0a7"/></g>`;
+      $('#whoo1').setAttribute('opacity', (ash.t > 300 ? Math.max(0, 1 - (ash.t - 300) / 1600) : 0).toFixed(2));
+      if (ash.t > 2700 && !done) {
+        done = true; re.hidden = false;
+        const [cx, cy] = client(svg, 800, 200); sparkle(cx, cy, 20);
+        coach('#b1', '<b>올라가는 공기</b>가 <b>가벼운 재</b>를 실어 올렸어요!<br>티백이 저절로 튀어 오른 것이 아니에요.');
+        finish(0, '#c1');
+      }
+    } else $('#whoo1').setAttribute('opacity', 0);
+    if (ash) setCap(cap, '휙! 가벼운 재가 날아올랐어요', 'hot');
+    else if (lit) setCap(cap, '불이 위에서부터 타 내려가요', 'hot');
+    else setCap(cap, '티백 통을 접시에 세웠어요', '');
+  });
+})();
+
+/* =========== 2. 페트병 연기 굴뚝 =========== */
+(() => {
+  const svg = $('#s2'), inc = $('#inc2'), hint = $('#h2'), cap = $('#cap2');
+  const C1 = 470, C2 = 1170, N1 = [C1 - 125, 762], N2 = [C2 - 125, 762];
+  const shape = cx => `M${cx - 125} 718 V340 C${cx - 125} 280 ${cx - 45} 270 ${cx - 45} 230 V172 M${cx + 45} 172 V230 C${cx + 45} 270 ${cx + 125} 280 ${cx + 125} 340 V800`;
+  const body = cx => `M${cx - 125} 800 V340 C${cx - 125} 280 ${cx - 45} 270 ${cx - 45} 230 V172 H${cx + 45} V230 C${cx + 45} 270 ${cx + 125} 280 ${cx + 125} 340 V800Z`;
+  const bottle = cx => `<path d="${body(cx)}" fill="#e9f7ff" fill-opacity=".55"/><path d="${shape(cx)}" fill="none" stroke="#7cc4ee" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>`
+    + `<rect x="${cx - 52}" y="160" width="104" height="18" rx="6" fill="none" stroke="#7cc4ee" stroke-width="6"/>`
+    + `<path d="M${cx + 90} 380 V700" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity=".7"/>`
+    + `<path d="M${cx - 160} 800 Q${cx - 125} 718 ${cx - 90} 800" fill="none" stroke="#7cc4ee" stroke-width="5" stroke-dasharray="8 8"/>`
+    + `<text x="${cx - 190}" y="700" text-anchor="middle" font-family="Jua" font-size="36" fill="#2476b8">홈</text>`;
+  let ix = 820, iy = 500, drag = false, ox = 0, oy = 0, smoke = [], lastEm = 0, t1 = 0, t2 = 0, said1 = false, said2 = false, won = false, airA = 0;
+  inc.addEventListener('pointerdown', e => {
+    e.preventDefault(); audio(); drag = true; try { svg.setPointerCapture(e.pointerId); } catch (_) {} hint.hidden = true; inc.style.cursor = 'grabbing';
+    const p = svgPt(svg, e); ox = p.x - ix; oy = p.y - iy;
+  });
+  svg.addEventListener('pointermove', e => { if (!drag) return; const p = svgPt(svg, e); ix = clamp(p.x - ox, 240, 1540); iy = clamp(p.y - oy, 200, 790); });
+  const drop = () => { drag = false; inc.style.cursor = 'grab'; };
+  svg.addEventListener('pointerup', drop); svg.addEventListener('pointercancel', drop);
+  const dist = (p) => Math.hypot(ix - p[0], iy - p[1]);
+  loop(1, (dt, now) => {
+    const near1 = dist(N1) < 120, near2 = dist(N2) < 120;
+    // 향 연기 내뿜기
+    if (now - lastEm > 60) {
+      lastEm = now;
+      const p = { x: ix, y: iy, r: 7, life: 1, mode: near2 ? 'in' : near1 ? 'spread' : 'free', vx: rand(-.03, .03), vy: -.05, wi: 0 };
+      if (p.mode === 'in') p.wp = [[C2 - 95, 765], [C2 + rand(-30, 30), 700], [C2 + rand(-30, 30), 420], [C2 + rand(-18, 18), 175], [C2 + rand(-70, 70), 10]];
+      if (p.mode === 'spread') { p.vx = rand(-.08, .08); p.vy = rand(-.05, -.01); }
+      smoke.push(p);
+    }
+    smoke.forEach(p => {
+      if (p.mode === 'in') {
+        const w = p.wp[p.wi], dx = w[0] - p.x, dy = w[1] - p.y, d = Math.hypot(dx, dy) || 1, sp = .3;
+        p.x += dx / d * sp * dt + rand(-.6, .6); p.y += dy / d * sp * dt;
+        if (d < 14 && p.wi < p.wp.length - 1) p.wi++;
+        p.r = Math.min(22, p.r + dt * .004);
+        if (p.y < 150) p.life -= dt / 900;
+      } else {
+        p.vx += rand(-.004, .004) * dt / 16; p.x += p.vx * dt; p.y += p.vy * dt;
+        p.r = Math.min(46, p.r + dt * .012); p.life -= dt / (p.mode === 'spread' ? 2200 : 2800);
+      }
+    });
+    smoke = smoke.filter(p => p.life > 0);
+    $('#smk2').innerHTML = smoke.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.r.toFixed(1)}" fill="#9aa3ad" opacity="${(.34 * p.life).toFixed(2)}"/>`).join('');
+    // 병 · 촛불 · 병 속 올라가는 공기
+    $('#bot2').innerHTML = bottle(C1) + bottle(C2) + `<use href="#tea" transform="translate(${C2} 766)"/>` + flameAt(C2, 752, .45, now);
+    $('#in2').innerHTML = risers([C2 - 55, C2 + 55], 680, 380, now, .13, 'o', .8)
+      + `<text x="${C2 + 140}" y="470" font-family="Jua" font-size="34" fill="#c85f00">데워진 공기가</text><text x="${C2 + 140}" y="512" font-family="Jua" font-size="34" fill="#c85f00">올라가요</text>`;
+    airA += ((near2 ? 1 : 0) - airA) * Math.min(1, dt / 300);
+    $('#air2').setAttribute('opacity', airA.toFixed(2));
+    // 향 (불붙은 끝이 ix, iy)
+    inc.innerHTML = `<path d="M${ix} ${iy} L${ix - 230} ${iy + 120}" stroke="transparent" stroke-width="90" stroke-linecap="round"/>`
+      + `<path d="M${ix} ${iy} L${ix - 230} ${iy + 120}" stroke="#a0522d" stroke-width="10" stroke-linecap="round"/>`
+      + `<path d="M${ix - 150} ${iy + 78} L${ix - 230} ${iy + 120}" stroke="#e8c27a" stroke-width="14" stroke-linecap="round"/>`
+      + `<circle cx="${ix}" cy="${iy}" r="${(9 + Math.sin(now / 120) * 2).toFixed(1)}" fill="#ff5a2a"/><circle cx="${ix}" cy="${iy}" r="70" fill="transparent"/>`;
+    if (!drag) { t1 = near1 ? t1 + dt : t1; t2 = near2 ? t2 + dt : t2; } else { if (near1) t1 += dt; if (near2) t2 += dt; }
+    if (t1 > 1600 && !said1) { said1 = true; sfx.pop(); coach('#b2', '<b>촛불 없는 병</b>은 연기가 홈 앞에서 그냥 <b>흩어져요</b>.' + (said2 ? '' : '<br>이번엔 <b>촛불 켠 병</b>의 홈에 대 볼까요?')); }
+    if (t2 > 1600 && !said2) {
+      said2 = true; sfx.puff(); const [x, y] = client(svg, C2, 160); sparkle(x, y, 18);
+      coach('#b2', '<b>촛불 켠 병</b>은 연기가 홈으로 들어가 <b>입구 위로</b> 올라가요!<br><b>바깥 공기가 밀려 들어오며</b> 연기를 싣고 가요.' + (said1 ? '' : ' <b>촛불 없는 병</b>에도 대 볼까요?'));
+    }
+    if (said1 && said2 && !won) { won = true; setTimeout(() => finish(1, '#c2'), 800); }
+    if (near2) setCap(cap, '바깥 공기가 홈으로 밀려 들어오며 연기를 실어 가요', 'hot');
+    else if (near1) setCap(cap, '연기가 홈 앞에서 그냥 흩어져요', 'cold');
+    else setCap(cap, '향을 끌어 홈 가까이에 대 보세요', '');
+  });
+})();
+
+/* =========== 3. 돌아가는 종이뱀 =========== */
+(() => {
+  const svg = $('#s3'), cap = $('#cap3'), hint = $('#h3');
+  const XS = [520, 650, 950, 1080], on = [false, false, false, false];
+  let a = 0, w = 0, saidOn = false, saidOff = false, won = false;
+  svg.addEventListener('pointerdown', e => {
+    const p = svgPt(svg, e); let k = -1, best = 120;
+    XS.forEach((x, i) => { const d = Math.hypot(p.x - x, p.y - 740); if (d < best) { best = d; k = i; } });
+    if (k < 0) return;
+    e.preventDefault(); audio(); hint.hidden = true; on[k] = !on[k];
+    on[k] ? (tone(660, .12, 'triangle'), tone(990, .12, 'triangle', .07)) : tone(330, .15, 'triangle');
+    const n = on.filter(Boolean).length;
+    if (n === 1 && !saidOn) { saidOn = true; coach('#b3', '촛불을 켰어요! 데워진 공기가 <b>위로 올라가며</b> 뱀을 아래에서 밀어요.<br>촛불을 <b>더</b> 켜 볼까요?'); }
+    if (n === 4 && !won) { won = true; coach('#b3', '촛불 4개! 촛불이 많을수록 뱀이 <b>더 빨리</b> 돌아요.<br>이번엔 촛불을 <b>모두</b> 꺼 볼까요?'); finish(2, '#c3'); }
+    if (n === 0 && won && !saidOff) { saidOff = true; coach('#b3', '촛불을 모두 끄니 올라가는 공기가 없어서<br>뱀이 점점 <b>멈췄어요</b>.'); }
+  });
+  loop(2, (dt, now) => {
+    const n = on.filter(Boolean).length;
+    w += (n * .0011 - w) * Math.min(1, dt / 1400); a += w * dt;
+    // 비스듬히 아래로 늘어진 종이뱀 (가운데가 핀 위)
+    const pts = [];
+    for (let t = 0; t <= 4.2 * Math.PI; t += .1) { const r = 16 + 20 * t; pts.push([800 + r * Math.cos(t + a), 240 + r * .95 + r * .28 * Math.sin(t + a)]); }
+    const d = 'M' + pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L'), h = pts[pts.length - 1], q = pts[pts.length - 3];
+    const ang = Math.atan2(h[1] - q[1], h[0] - q[0]) * 180 / Math.PI;
+    $('#snk3').innerHTML = `<path d="${d}" stroke="#2f9e6e" stroke-width="34" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="#9be3c1" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
+      + `<g transform="translate(${h[0].toFixed(1)} ${h[1].toFixed(1)}) rotate(${ang.toFixed(1)})"><path d="M30 0 L52 -6 M30 0 L52 6" stroke="#ff6b8a" stroke-width="5" stroke-linecap="round"/><ellipse rx="34" ry="24" fill="#9be3c1" stroke="#2f9e6e" stroke-width="6"/><circle cx="12" cy="-10" r="6" fill="#33414f"/><circle cx="12" cy="10" r="6" fill="#33414f"/></g>`;
+    $('#cdl3').innerHTML = XS.map((x, i) => `<use href="#tea" transform="translate(${x} 756)"/>` + (on[i] ? flameAt(x, 742, .5, now, i) : `<circle cx="${x}" cy="740" r="62" fill="none" stroke="#ff8a1f" stroke-width="4" stroke-dasharray="10 10" opacity=".5"/>`)).join('');
+    $('#arr3').innerHTML = risers(XS.flatMap((x, i) => on[i] ? [x - 30, x + 30] : []), 660, 300, now, .1 + .02 * n, 'o', .85);
+    $('#cnt3').textContent = `켠 촛불 ${n}개`;
+    if (n === 0) setCap(cap, w > .0002 ? '촛불을 끄니 뱀이 점점 멈춰요' : '촛불이 꺼져 있어요. 뱀이 가만히 있어요', '');
+    else if (n === 1) setCap(cap, '촛불 1개 · 뱀이 천천히 돌아요', 'hot');
+    else if (n < 4) setCap(cap, `촛불 ${n}개 · 뱀이 더 빨리 돌아요`, 'hot');
+    else setCap(cap, '촛불 4개 · 뱀이 아주 빨리 돌아요!', 'hot');
+  });
+})();
+
+/* =========== 4. 빙글빙글 대류 =========== */
+(() => {
+  const cap = $('#cap4'), sb = $('#stove4'), fb = $('#fridge4');
+  const P = [[330, 600], [330, 200], [1340, 200], [1340, 740], [420, 740]];
+  const seg = P.map((p, i) => { const q = P[(i + 1) % P.length]; return Math.hypot(q[0] - p[0], q[1] - p[1]); }), PER = seg.reduce((x, y) => x + y);
+  const at = s => { s = ((s % PER) + PER) % PER; for (let i = 0; i < P.length; i++) { if (s <= seg[i]) { const p = P[i], q = P[(i + 1) % P.length], k = s / seg[i]; return [lerp(p[0], q[0], k), lerp(p[1], q[1], k)]; } s -= seg[i]; } return P[0]; };
+  const rd = Array.from({ length: 30 }, (_, i) => ({ s: i * PER / 30 + rand(0, 40), ox: rand(-45, 45), oy: rand(-45, 45), T: .15, ph: rand(0, 6.28) }));
+  const fd = Array.from({ length: 26 }, () => ({ x: rand(480, 760), y: rand(200, 760), a: rand(0, 6.28), out: false, vx: 0, vy: 0 }));
+  let mode = 'room', stove = false, open = false, roomT = 0, frT = 0, arrA = 0, farA = 0, won = false;
+  const labels = () => {
+    sb.textContent = mode === 'fridge' ? '🏠 난로 방으로' : stove ? '🔥 난로 끄기' : '🔥 난로 켜기';
+    fb.textContent = mode === 'fridge' && open ? '🧊 냉장고 문 닫기' : '🧊 냉장고 문 열기';
+    sb.classList.toggle('pulse', !stove && mode === 'room'); show($('#room4'), mode === 'room'); show($('#frg4'), mode === 'fridge');
+  };
+  sb.onclick = () => {
+    audio(); sfx.pop();
+    if (mode === 'fridge') { mode = 'room'; if (!stove) stove = true; } else stove = !stove;
+    if (stove) coach('#b4', '난로를 켰어요! 데워진 공기(<b>주황</b>)는 위로 올라가 천장을 따라 퍼져요.<br>창문 쪽에서 식은 공기(<b class="c">하늘색</b>)는 아래로 내려와요.');
+    else coach('#b4', '난로를 껐어요. 공기가 더 데워지지 않아요.<br>다시 켜 볼까요?');
+    labels();
+  };
+  fb.onclick = () => {
+    audio(); sfx.pop();
+    if (mode !== 'fridge') { mode = 'fridge'; open = true; } else open = !open;
+    if (open) coach('#b4', '냉장고 속 <b class="c">식은 공기</b>는 무거워서 문을 열면 <b class="c">아래로</b> 흘러내려요.<br>이것이 <b class="c">하강기류</b>예요. 그래서 발이 먼저 시원해요!');
+    else coach('#b4', '냉장고 문을 닫았어요.');
+    labels();
+  };
+  labels();
+  loop(3, (dt, now) => {
+    if (mode === 'room') {
+      if (stove) roomT += dt;
+      rd.forEach(d => {
+        if (stove) d.s += .14 * dt;
+        const [x, y] = at(d.s), px = x + d.ox + Math.sin(now / 700 + d.ph) * 6, py = y + d.oy + Math.cos(now / 800 + d.ph) * 6;
+        if (stove && x < 450 && y > 480) d.T += (1 - d.T) * Math.min(1, dt / 500);
+        else if (x > 1250) d.T += (0 - d.T) * Math.min(1, dt / 600);
+        else if (!stove) d.T += (.15 - d.T) * Math.min(1, dt / 3000);
+        d.px = px; d.py = py;
+      });
+      $('#rdot4').innerHTML = rd.map(d => dotSvg({ x: d.px, y: d.py }, 18, d.T > .5 ? '#ffc890' : '#cfe9fa', tcol(d.T))).join('');
+      $('#stv4').style.display = stove ? '' : 'none';
+      arrA += ((stove && roomT > 1500 ? 1 : 0) - arrA) * Math.min(1, dt / 500);
+      $('#rarr4').setAttribute('opacity', arrA.toFixed(2));
+      setCap(cap, stove ? '데워진 공기는 올라가고, 식은 공기는 내려와요' : '난로가 꺼져 있어요. 방이 추워요', stove ? 'hot' : '');
+    } else {
+      if (open) frT += dt;
+      fd.forEach(d => {
+        if (!d.out) {
+          moveBox(d, .05, dt, 475, 195, 765, 765);
+          if (open && d.y > 460 && Math.random() < dt / 1500) { d.out = true; d.vx = rand(.08, .16); d.vy = 0; }
+        } else {
+          d.vy = Math.min(.25, d.vy + .0005 * dt); d.x += d.vx * dt; d.y += d.vy * dt;
+          if (d.y > 772) { d.y = 772; d.vy = 0; d.vx = Math.max(d.vx, .1); }
+          if (d.x > 1560) { d.out = false; d.x = rand(480, 760); d.y = rand(200, 420); }
+        }
+      });
+      $('#fdot4').innerHTML = fd.map(d => `<g opacity="${clamp((1560 - d.x) / 300, 0, 1).toFixed(2)}">${dotSvg(d, 16, '#cfe9fa', '#3a9ae0')}</g>`).join('');
+      $('#door4').innerHTML = open
+        ? `<path d="M810 150 L940 105 V850 L810 805Z" fill="#f5f8fb" stroke="#aab6c2" stroke-width="7" stroke-linejoin="round"/><rect x="900" y="400" width="14" height="120" rx="7" fill="#aab6c2"/>`
+        : `<rect x="430" y="150" width="380" height="655" rx="26" fill="#fff" stroke="#aab6c2" stroke-width="8"/><path d="M430 380 H810" stroke="#aab6c2" stroke-width="6"/><rect x="770" y="220" width="14" height="110" rx="7" fill="#aab6c2"/><rect x="770" y="430" width="14" height="140" rx="7" fill="#aab6c2"/>`;
+      farA += ((open ? 1 : 0) - farA) * Math.min(1, dt / 500);
+      $('#farr4').setAttribute('opacity', farA.toFixed(2));
+      setCap(cap, open ? '식은 공기가 아래로 흘러내려요 · 하강기류' : '냉장고 문이 닫혀 있어요', open ? 'cold' : '');
+    }
+    if (roomT > 4000 && frT > 2500 && !won) { won = true; finish(3, '#c4'); }
+  });
+})();
+
+/* =========== 5. O/X 퀴즈 =========== */
+(() => {
+  const Q = [
+    { q: '데워진 공기는 위로 올라간다.', a: true, ok: '딩동댕! 데워진 공기는 위로 올라가요. 이 흐름이 상승기류예요.', no: '다시 생각해 봐요! 종이뱀을 밀어 준 공기는 어디로 움직였나요?' },
+    { q: '티백은 무거워서 날아올랐다.', a: false, ok: '딩동댕! 다 타서 가벼운 재가 되어 올라가는 공기를 탔어요.', no: '다시 생각해 봐요! 다 타고 남은 재는 무거울까요, 가벼울까요?' },
+    { q: '식은 공기는 아래로 내려온다.', a: true, ok: '딩동댕! 식은 공기는 아래로 내려와요. 이 흐름이 하강기류예요.', no: '다시 생각해 봐요! 냉장고 문을 열면 식은 공기는 어디로 흘렀나요?' },
+    { q: '페트병 홈으로 연기가 빨려 들어갔다.', a: false, ok: '딩동댕! 바깥 공기가 밀려 들어오며 연기를 실어 갔어요.', no: '다시 생각해 봐요! 홈으로 밀려 들어온 것은 무엇이었나요?' },
+    { q: '종이뱀은 스스로 돈다.', a: false, ok: '딩동댕! 올라가는 공기가 뱀을 밀어서 돌아요.', no: '다시 생각해 봐요! 촛불을 모두 끄면 뱀은 어떻게 됐나요?' }
+  ];
+  const qb = $('#q5'), fb = $('#fb5'), o = $('#o5'), x = $('#x5'), nx = $('#nx5'), re = $('#re5'), dots = $('#dots5');
+  let i = 0, lock = false;
+  dots.innerHTML = Q.map((_, j) => `<i>${j + 1}</i>`).join('');
+  function say(t, cls) { fb.className = 'qfb'; void fb.offsetWidth; fb.className = 'qfb ' + cls; fb.textContent = t; }
+  function ask() {
+    lock = false; o.disabled = x.disabled = false; o.classList.remove('pick'); x.classList.remove('pick'); nx.hidden = true;
+    qb.innerHTML = `<small>문제 ${i + 1} / ${Q.length}</small><span>${Q[i].q}</span>`;
+    fb.className = 'qfb'; fb.textContent = '맞으면 O, 틀리면 X를 눌러요!';
+    [...dots.children].forEach((d, j) => { d.className = j < i ? 'ok' : j === i ? 'now' : ''; });
+  }
+  function ans(v, btn, e) {
+    if (lock) return; audio();
+    if (v !== Q[i].a) { sfx.bad(); say(Q[i].no, 'bad'); return; }
+    lock = true; o.disabled = x.disabled = true; btn.classList.add('pick'); dots.children[i].className = 'ok';
+    say(Q[i].ok, 'good'); sparkle(e.clientX, e.clientY, 18);
+    if (i < Q.length - 1) { sfx.good(); nx.hidden = false; }
+    else { re.hidden = false; coach('#b5', '다섯 문제를 모두 풀었어요! 정말 잘했어요.<br>데워진 공기는 <b>위로</b>, 식은 공기는 <b class="c">아래로</b>!'); finish(4, '#c5'); }
+  }
+  o.onclick = e => ans(true, o, e); x.onclick = e => ans(false, x, e);
+  nx.onclick = () => { i++; sfx.pop(); ask(); };
+  re.onclick = () => { i = 0; re.hidden = true; $('#c5').classList.remove('on'); sfx.pop(); ask(); };
+  ask();
+})();
+</script>
+</body>
+</html>
